@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Code Generator</title>
+
+  <!-- QRCode.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6fb;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 15px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      margin-bottom: 15px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      resize: none;
+      height: 40px;
+      line-height: 1;
+    }
+
+    button {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      background: #6b7280;
+      color: #fff;
+      font-size: 18px;
+      white-space: nowrap;
+    }
+
+    #qrcode {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #555;
+      margin-top: 15px;
+    }
+
+    .buttons {
+      margin-top: 15px;
+    }
+
+    .primary {
+      background: #2563eb;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>QR Code Generator</h1>
+
+    <!-- Input + Reset -->
+    <div class="input-row">
+      <textarea id="textInput" placeholder="Enter URL or text"></textarea>
+      <button onclick="resetQR()">Reset</button>
+    </div>
+
+    <!-- QR Output -->
+    <div id="qrcode"></div>
+
+    <!-- Download -->
+    <div class="buttons">
+      <button class="primary" onclick="downloadQR()">Download QR Code</button>
+    </div>
+
+    <div class="note">
+      QR code updates instantly as you type
+    </div>
+  </div>
+
+  <script>
+    const qrContainer = document.getElementById('qrcode');
+    const input = document.getElementById('textInput');
+
+    // Initial dummy QR
+    // Initial dummy QR
+    // Initial dummy QR (shown on page load)
+    let qr = new QRCode(qrContainer, {
+      text: ' ',
+      width: 300,
+      height: 300,
+      colorDark: '#d1d5db',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    input.addEventListener('input', () => {
+      const userText = input.value.trim();
+
+      qrContainer.innerHTML = '';
+
+      if (userText === '') {
+        // Show dummy QR when input is empty
+        qr = new QRCode(qrContainer, {
+          text: ' ',
+          width: 300,
+          height: 300,
+          colorDark: '#d1d5db',
+          colorLight: '#ffffff'
+        });
+        return;
+      }
+
+      // Generate QR immediately when user types
+      qr = new QRCode(qrContainer, {
+        text: userText,
+        width: 300,
+        height: 300,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    });
+
+
+
+    function downloadQR() {
+      const img = document.querySelector('#qrcode img');
+      if (!img) return;
+
+      const link = document.createElement('a');
+      link.href = img.src;
+      link.download = 'qr-code.png';
+      link.click();
+    }
+
+    function resetQR() {
+      input.value = '';
+      qrContainer.innerHTML = '';
+
+      // Restore dummy QR
+      qr = new QRCode(qrContainer, {
+        text: ' ',
+        width: 300,
+        height: 300,
+        colorDark: '#d1d5db',
+        colorLight: '#ffffff'
+      });  
+  
+    }
+
+
+  </script>
+
+</body>
+</html>
